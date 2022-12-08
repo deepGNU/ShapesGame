@@ -1,100 +1,84 @@
 class Snake
 {
-    private Point _headPosition;
     public Point Head { get { return _headPosition; } }
-    private List<Point> _points;
+    private Point _headPosition;
+    private Point _prevHeadPosition;
+    private List<Point> _path;
     private int _maxX = Console.WindowWidth - 1;
     private int _maxY = Console.WindowHeight - 1;
+
     public Snake(Point start)
     {
-        _headPosition = start;
-        _points = new List<Point>();
-        _points.Add(_headPosition.Clone());
-        Console.ForegroundColor = ConsoleColor.White;
+        _headPosition = _prevHeadPosition = start;
+        _path = new List<Point>();
         DrawHead();
     }
 
-    public bool Move()
+    public void Move()
     {
-        ConsoleKeyInfo key = Console.ReadKey(true);
-        // Console.ForegroundColor = ConsoleColor.Blue;
-        // DrawHead();
-        switch (key.Key)
+        _prevHeadPosition = _headPosition.Clone();
+
+        switch (Console.ReadKey(true).Key)
         {
-            case ConsoleKey.UpArrow:
-                if (_headPosition.Y == 0) return true;
-                _headPosition.Y--;
-                break;
-            case ConsoleKey.DownArrow:
-                if (_headPosition.Y == _maxY) return true;
-                _headPosition.Y++;
-                break;
-            case ConsoleKey.RightArrow:
-                if (_headPosition.X == _maxX) return true;
-                _headPosition.X++;
-                break;
-            case ConsoleKey.LeftArrow:
-                if (_headPosition.X == 0) return true;
-                _headPosition.X--;
-                break;
-            default:
-                return true;
+            case ConsoleKey.UpArrow:    MoveUp();    break;
+            case ConsoleKey.DownArrow:  MoveDown();  break;
+            case ConsoleKey.RightArrow: MoveRight(); break;
+            case ConsoleKey.LeftArrow:  MoveLeft();  break;
         }
 
-        if (SteppingOnSnek(_headPosition)) return false;
-        _points.Add(_headPosition.Clone());
-        Console.ForegroundColor = ConsoleColor.White;
-        DrawHead();
-        return true;
+        if (DidMove())
+        {
+            _path.Add(_prevHeadPosition);
+            DrawHead();
+        }
     }
 
-    public void MoveUp()
+    private bool DidMove()
+    {
+        return !_headPosition.Equals(_prevHeadPosition);
+    }
+
+    private void MoveUp()
     {
         if (_headPosition.Y > 0)
-        {
             _headPosition.Y--;
-            DrawHead();
-        }
     }
 
-    public void MoveDown()
+    private void MoveDown()
     {
         if (_headPosition.Y < _maxY)
-        {
             _headPosition.Y++;
-            DrawHead();
-        }
     }
 
-    public void MoveRight()
+    private void MoveRight()
     {
         if (_headPosition.X < _maxX)
-        {
             _headPosition.X++;
-            DrawHead();
-        }
     }
 
-    public void MoveLeft()
+    private void MoveLeft()
     {
         if (_headPosition.X > 0)
-        {
             _headPosition.X--;
-            DrawHead();
-        }
     }
 
     private void DrawHead()
     {
-        Console.ForegroundColor = ConsoleColor.White;
-        Console.SetCursorPosition(_headPosition.X, _headPosition.Y);
+        DrawStar(_prevHeadPosition, ConsoleColor.Blue);
+        DrawStar(_headPosition, ConsoleColor.White);
+    }
+
+    private void DrawStar(Point point, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.SetCursorPosition(point.X, point.Y);
         Console.Write("*");
     }
 
-    public bool SteppingOnSnek(Point p)
+    public bool IsSteppingOnSelf()
     {
-        foreach (var point in _points)
-            if (point.Equals(p)) return true;
+        foreach (var point in _path)
+            if (point.Equals(_headPosition)) return true;
         return false;
     }
 }

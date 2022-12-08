@@ -4,31 +4,8 @@ Random _random = new Random();
 int screenWidth = Console.WindowWidth;
 int screenHeight = Console.WindowHeight;
 Console.CursorVisible = false;
-
-// while (true) PlayRound();
-
-// void PlayRound()
-// {
-//     Console.Clear();
-//     snek = new Snake(RandomPointOnScreen());
-//     Console.CursorVisible = false;
-//     // Console.SetWindowSize(80, 25); 
-
-//     // shapes = new IShape[]
-//     // {
-//     //     new Line(RandomPointOnScreen()),
-//     //     new Triangle(RandomPointOnScreen()),
-//     //     new Square(RandomPointOnScreen(), RandomColor()),
-//     //     new Rectangle(RandomPointOnScreen())
-//     // };
-
-//     foreach (var shape in shapes) shape.Draw();
-//     while (snek.Move() && NoShapeHits()) ;
-// }
-
-// snek = new Snake(RandomPointOnScreen());
-// Console.CursorVisible = false;
 // Console.SetWindowSize(80, 25); 
+
 Type[] types = new Type[]
 { typeof(Line), typeof(Square),
   typeof(Rectangle), typeof(Triangle) };
@@ -57,49 +34,34 @@ void PlayRound(int numOfShapes)
     for (int i = 0; i < numOfShapes; i++)
         shapes.Add(RandomShape());
 
-    foreach (var shape in shapes) shape.Draw();
+    foreach (var shape in shapes)
+        shape.Draw();
 
-    while (NoShapeHits())
-    {
-        ConsoleKey pressedKey = Console.ReadKey(true).Key;
-
-        switch (pressedKey)
-        {
-            case ConsoleKey.UpArrow:
-                snek.MoveUp();
-                break;
-            case ConsoleKey.DownArrow:
-                snek.MoveDown();
-                break;
-            case ConsoleKey.RightArrow:
-                snek.MoveRight();
-                break;
-            case ConsoleKey.LeftArrow:
-                snek.MoveLeft();
-                break;
-            default:
-                break;
-        }
-    }
+    while (!IsShapeHit(snek.Head) && !snek.IsSteppingOnSelf())
+        snek.Move();
 }
 
-bool NoShapeHits()
+bool IsShapeHit(Point point)
 {
     foreach (var shape in shapes)
-        if (shape.IsHit(snek.Head)) return false;
-    return true;
+        if (shape.IsHit(point)) return true;
+    return false;
 }
 
 Point RandomPointOnScreen()
 {
-    int x = _random.Next(screenWidth);
-    int y = _random.Next(screenHeight);
-    return new Point(x, y);
+    Point point = new Point();
+    do
+    {
+        point.X = _random.Next(screenWidth);
+        point.Y = _random.Next(screenHeight);
+    } while (IsShapeHit(point));
+    return point;
 }
 
 ConsoleColor RandomColor()
 {
-    var colors = ((IEnumerable<ConsoleColor>)
+    Array colors = ((IEnumerable<ConsoleColor>)
         Enum.GetValues(typeof(ConsoleColor)))
         .Where(x => x != ConsoleColor.Black).ToArray();
 
