@@ -1,0 +1,15 @@
+/home/deep42/C#/ShapesGame/bin/Debug/net6.0/ShapesGame
+/home/deep42/C#/ShapesGame/bin/Debug/net6.0/ShapesGame.deps.json
+/home/deep42/C#/ShapesGame/bin/Debug/net6.0/ShapesGame.runtimeconfig.json
+/home/deep42/C#/ShapesGame/bin/Debug/net6.0/ShapesGame.dll
+/home/deep42/C#/ShapesGame/bin/Debug/net6.0/ShapesGame.pdb
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.csproj.AssemblyReference.cache
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.GeneratedMSBuildEditorConfig.editorconfig
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.AssemblyInfoInputs.cache
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.AssemblyInfo.cs
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.csproj.CoreCompileInputs.cache
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.dll
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/refint/ShapesGame.dll
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.pdb
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ShapesGame.genruntimeconfig.cache
+/home/deep42/C#/ShapesGame/obj/Debug/net6.0/ref/ShapesGame.dll
