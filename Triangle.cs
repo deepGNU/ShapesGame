@@ -5,38 +5,34 @@ class Triangle : IShape
     public char TheChar { get; set; }
     public ConsoleColor Color { get; set; }
     public int Height { get; set; }
-    public List<Point> Points { get; set; }
-    static Random _rand = new Random();
+    private List<Point> _points;
+    static Random _random = new Random();
     static int _minSize = 2;
     static int _maxSize = 9;
-    private int _size = _rand.Next(_minSize, _maxSize + 1);
+    private int _size = _random.Next(_minSize, _maxSize + 1);
 
-    public Triangle(Point topLeft, ConsoleColor color = ConsoleColor.Green, char theChar = '#')
+    public Triangle(ConsoleColor color, char theChar = '#')
     {
-        Top = topLeft.Y;
-        Left = topLeft.X;
+        Top = _random.Next(Console.WindowHeight - _size);
+        Left = _random.Next(Console.WindowWidth - _size);
         TheChar = theChar;
         Color = color;
-        Points = new List<Point>();
+        _points = new List<Point>();
+
+        for (int y = 0; y < _size; y++)
+            for (int x = 0; x <= y; x++)
+                _points.Add(new Point(Left + x, Top + y));
     }
 
     public void Draw()
     {
-        Console.ForegroundColor = Color;
-        for (int i = 0; i < _size; i++)
-        {
-            Console.SetCursorPosition(Left, Top + i);
-            for (int j = 0; j < i; j++)
-            {
-                Console.Write(TheChar);
-                Points.Add(new Point(Left + j, Top + i));
-            }
-        }
+        foreach (Point point in _points)
+            point.Draw(TheChar, Color);
     }
 
     public bool IsHit(Point p)
     {
-        foreach (var point in Points)
+        foreach (var point in _points)
             if (point.Equals(p)) return true;
         return false;
     }

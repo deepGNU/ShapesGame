@@ -4,38 +4,34 @@ class Square : IShape
     public int Left { get; set; }
     public char TheChar { get; set; }
     public ConsoleColor Color { get; set; }
-    public List<Point> Points { get; set; }
+    private List<Point> _points;
     static Random _random = new Random();
     static int _minSize = 3;
     static int _maxSize = 10;
     private int _size = _random.Next(_minSize, _maxSize + 1);
 
-    public Square(Point topLeft, ConsoleColor color, char theChar = 'ם')
+    public Square(ConsoleColor color, char theChar = 'ם')
     {
-        Top = topLeft.Y;
-        Left = topLeft.X;
+        Top = _random.Next(Console.WindowHeight - _size);
+        Left = _random.Next(Console.WindowWidth - _size);
         Color = color;
         TheChar = theChar;
-        Points = new List<Point>();
+        _points = new List<Point>();
+
+        for (int i = 0; i < _size; i++)
+            for (int j = 0; j < _size; j++)
+                _points.Add(new Point(Left + j, Top + i));
     }
 
     public void Draw()
     {
-        Console.ForegroundColor = Color;
-        for (int i = 0; i < _size; i++)
-        {
-            Console.SetCursorPosition(Left, Top + i);
-            for (int j = 0; j < _size; j++)
-            {
-                Console.Write(TheChar);
-                Points.Add(new Point(Left + j, Top + i));
-            }
-        }
+        foreach (Point point in _points)
+            point.Draw(TheChar, Color);
     }
 
     public bool IsHit(Point p)
     {
-        foreach (var point in Points)
+        foreach (var point in _points)
             if (point.Equals(p)) return true;
         return false;
     }

@@ -1,17 +1,24 @@
+using System.Globalization;
+
 class Snake
 {
+    public static int Score = 0;
     public Point Head { get { return _headPosition; } }
     private Point _headPosition;
     private Point _prevHeadPosition;
     private List<Point> _path;
     private int _maxX = Console.WindowWidth - 1;
     private int _maxY = Console.WindowHeight - 1;
+    private const char _CHAR = '*';
+    private const ConsoleColor _HEAD_COLOR = ConsoleColor.White;
+    private const ConsoleColor _PATH_COLOR = ConsoleColor.Blue;
 
     public Snake(Point start)
     {
-        _headPosition = _prevHeadPosition = start;
         _path = new List<Point>();
-        DrawHead();
+        _headPosition = _prevHeadPosition = start;
+        _headPosition.Draw(_CHAR, _HEAD_COLOR);
+        Score++;
     }
 
     public void Move()
@@ -28,8 +35,9 @@ class Snake
 
         if (DidMove())
         {
+            DrawMove();
             _path.Add(_prevHeadPosition);
-            DrawHead();
+            Score++;
         }
     }
 
@@ -62,17 +70,10 @@ class Snake
             _headPosition.X--;
     }
 
-    private void DrawHead()
+    private void DrawMove()
     {
-        DrawStar(_prevHeadPosition, ConsoleColor.Blue);
-        DrawStar(_headPosition, ConsoleColor.White);
-    }
-
-    private void DrawStar(Point point, ConsoleColor color)
-    {
-        Console.ForegroundColor = color;
-        Console.SetCursorPosition(point.X, point.Y);
-        Console.Write("*");
+        _prevHeadPosition.Draw(_CHAR, _PATH_COLOR);
+        _headPosition.Draw(_CHAR, _HEAD_COLOR);
     }
 
     public bool IsSteppingOnSelf()

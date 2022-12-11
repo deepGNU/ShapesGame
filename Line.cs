@@ -6,30 +6,27 @@ class Line : IShape
     public int Length { get; set; }
     public ConsoleColor Color { get; set; }
     public List<Point> Points { get; set; }
-    private Random random = new Random();
+    private Random _random = new Random();
     private int _minLength = 2;
     private int _maxLength = 10;
 
-
-    public Line(Point topLeft, ConsoleColor color = ConsoleColor.Red, char theChar = '=')
+    public Line(ConsoleColor color, char theChar = '=')
     {
-        Top = topLeft.Y;
-        Left = topLeft.X;
         Color = color;
         TheChar = theChar;
-        Length = random.Next(_minLength, _maxLength + 1);
+        Length = _random.Next(_minLength, _maxLength + 1);
+        Left = _random.Next(Console.WindowWidth - Length);
+        Top = _random.Next(Console.WindowHeight - 1);
         Points = new List<Point>();
+
+        for (int i = 0; i < Length; i++)
+            Points.Add(new Point(Left + i, Top));
     }
 
     public void Draw()
     {
-        Console.SetCursorPosition(Left, Top);
-        Console.ForegroundColor = Color;
-        for (int i = 0; i < Length; i++)
-        {
-            Console.Write(TheChar);
-            Points.Add(new Point(Left + i, Top));
-        }
+        foreach (Point point in Points)
+            point.Draw(TheChar, Color);
     }
 
     public bool IsHit(Point p)
