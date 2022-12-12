@@ -5,7 +5,8 @@ class Line : IShape
     public char TheChar { get; set; }
     public int Length { get; set; }
     public ConsoleColor Color { get; set; }
-    public List<Point> Points { get; set; }
+    public int Area { get { return _points.Count(); } }
+    public List<Point> _points;
     private Random _random = new Random();
     private int _minLength = 2;
     private int _maxLength = 10;
@@ -16,22 +17,22 @@ class Line : IShape
         TheChar = theChar;
         Length = _random.Next(_minLength, _maxLength + 1);
         Left = _random.Next(Console.WindowWidth - Length);
-        Top = _random.Next(Console.WindowHeight - 1);
-        Points = new List<Point>();
+        Top = _random.Next(1, Console.WindowHeight - 1);
+        _points = new List<Point>();
 
         for (int i = 0; i < Length; i++)
-            Points.Add(new Point(Left + i, Top));
+            _points.Add(new Point(Left + i, Top));
     }
 
     public void Draw()
     {
-        foreach (Point point in Points)
+        foreach (Point point in _points)
             point.Draw(TheChar, Color);
     }
 
     public bool IsHit(Point p)
     {
-        foreach (var point in Points)
+        foreach (var point in _points)
             if (point.Equals(p)) return true;
         return false;
     }

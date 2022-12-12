@@ -4,6 +4,7 @@ class Rectangle : IShape
     public int Left { get; set; }
     public char TheChar { get; set; }
     public ConsoleColor Color { get; set; }
+    public int Area { get { return _points.Count(); } }
     public List<Point> _points { get; set; }
     static Random _random = new Random();
     static int _minLength = 2;
@@ -13,7 +14,7 @@ class Rectangle : IShape
 
     public Rectangle(ConsoleColor color, char theChar = 'ם')
     {
-        Top = _random.Next(Console.WindowHeight - _height);
+        Top = _random.Next(1, Console.WindowHeight - _height);
         Left = _random.Next(Console.WindowWidth - _width);
         TheChar = theChar;
         Color = color;

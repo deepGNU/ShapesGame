@@ -1,9 +1,8 @@
-using System.Globalization;
-
 class Snake
 {
     public static int Score = 0;
     public Point Head { get { return _headPosition; } }
+    public int Area { get { return _path.Count() + 1; } }
     private Point _headPosition;
     private Point _prevHeadPosition;
     private List<Point> _path;
@@ -18,7 +17,6 @@ class Snake
         _path = new List<Point>();
         _headPosition = _prevHeadPosition = start;
         _headPosition.Draw(_CHAR, _HEAD_COLOR);
-        Score++;
     }
 
     public void Move()
@@ -38,6 +36,9 @@ class Snake
             DrawMove();
             _path.Add(_prevHeadPosition);
             Score++;
+            Thread.Sleep(50);
+            while (Console.KeyAvailable)
+                Console.ReadKey(true);
         }
     }
 
@@ -48,7 +49,7 @@ class Snake
 
     private void MoveUp()
     {
-        if (_headPosition.Y > 0)
+        if (_headPosition.Y > 1)
             _headPosition.Y--;
     }
 
@@ -78,8 +79,8 @@ class Snake
 
     public bool IsSteppingOnSelf()
     {
-        foreach (var point in _path)
-            if (point.Equals(_headPosition)) return true;
+        foreach (Point point in _path)
+            if (_headPosition.Equals(point)) return true;
         return false;
     }
 }

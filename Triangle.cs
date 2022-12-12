@@ -5,6 +5,7 @@ class Triangle : IShape
     public char TheChar { get; set; }
     public ConsoleColor Color { get; set; }
     public int Height { get; set; }
+    public int Area { get { return _points.Count(); } }
     private List<Point> _points;
     static Random _random = new Random();
     static int _minSize = 2;
@@ -13,7 +14,7 @@ class Triangle : IShape
 
     public Triangle(ConsoleColor color, char theChar = '#')
     {
-        Top = _random.Next(Console.WindowHeight - _size);
+        Top = _random.Next(1, Console.WindowHeight - _size);
         Left = _random.Next(Console.WindowWidth - _size);
         TheChar = theChar;
         Color = color;

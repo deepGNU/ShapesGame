@@ -4,6 +4,7 @@ class Square : IShape
     public int Left { get; set; }
     public char TheChar { get; set; }
     public ConsoleColor Color { get; set; }
+    public int Area { get { return _points.Count(); } }
     private List<Point> _points;
     static Random _random = new Random();
     static int _minSize = 3;
@@ -12,7 +13,7 @@ class Square : IShape
 
     public Square(ConsoleColor color, char theChar = 'ם')
     {
-        Top = _random.Next(Console.WindowHeight - _size);
+        Top = _random.Next(1, Console.WindowHeight - _size);
         Left = _random.Next(Console.WindowWidth - _size);
         Color = color;
         TheChar = theChar;

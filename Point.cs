@@ -28,10 +28,10 @@ class Point
         Console.Write(charToDraw);
     }
 
-    public static Point GetRandom(int maxX, int maxY)
+    public static Point GetRandom(int maxX, int maxY, int minX = 0, int minY = 0)
     {
-        int x = _random.Next(maxX);
-        int y = _random.Next(maxY);
+        int x = _random.Next(minX, maxX);
+        int y = _random.Next(minY, maxY);
         return new Point(x, y);
     }
 }
