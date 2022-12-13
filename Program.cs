@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 
 Snake snek;
-List<IShape> shapes = new List<IShape>();
+List<Shape> shapes = new List<Shape>();
 Random _random = new Random();
 const int MAX_SHAPES = 14;
 const int INITAL_SHAPES = 6;
@@ -16,17 +16,17 @@ Type[] types = new Type[]
 { typeof(Line), typeof(Square),
   typeof(Rectangle), typeof(Triangle) };
 
-Dictionary<Type, Func<IShape>> ctorDict =
-        new Dictionary<Type, Func<IShape>>();
+Dictionary<Type, Func<Shape>> ctorDict =
+        new Dictionary<Type, Func<Shape>>();
 
-ctorDict[typeof(Line)] =      () => new Line(RandomColor());
-ctorDict[typeof(Square)] =    () => new Square(RandomColor());
+ctorDict[typeof(Line)] = () => new Line(RandomColor());
+ctorDict[typeof(Square)] = () => new Square(RandomColor());
 ctorDict[typeof(Rectangle)] = () => new Rectangle(RandomColor());
-ctorDict[typeof(Triangle)] =  () => new Triangle(RandomColor());
+ctorDict[typeof(Triangle)] = () => new Triangle(RandomColor());
 
-Func<IShape> RandomShape = () => ctorDict[types[_random.Next(types.Length)]]();
+Func<Shape> RandomShape = () => ctorDict[types[_random.Next(types.Length)]]();
 
-Stopwatch stopwatch= Stopwatch.StartNew();
+Stopwatch stopwatch = Stopwatch.StartNew();
 
 for (int numOfShapes = INITAL_SHAPES; numOfShapes <= MAX_SHAPES; numOfShapes++)
 {
@@ -47,10 +47,12 @@ void PlayRound(int numOfShapes)
 {
     Console.Clear();
 
-    shapes = new List<IShape>();
+    shapes = new List<Shape>();
 
     for (int i = 0; i < numOfShapes; i++)
         shapes.Add(RandomShape());
+
+    CorrectOverlaps();
 
     foreach (var shape in shapes)
         shape.Draw();
@@ -76,7 +78,7 @@ Point RandomStartPoint()
     Point point;
     do
     {
-        point = Point.GetRandom(maxX, maxY, 1, 1);    
+        point = Point.GetRandom(maxX, maxY, 1, 1);
     } while (IsShapeHit(point));
     return point;
 }
@@ -111,4 +113,24 @@ void PrintGameState(int numShapes)
     Console.Write($"\tTOTAL SCORE: {Snake.Score}");
     Console.Write(" | ");
     Console.Write($"ROUND {numShapes - INITAL_SHAPES + 1} OUT OF {MAX_SHAPES - INITAL_SHAPES + 1}\t");
+}
+
+void CorrectOverlaps()
+{
+    for (int i = 0; i < shapes.Count(); i++)
+    {
+        for (int j = i + 1; j < shapes.Count(); j++)
+        {
+            int n = 1;
+            if (shapes[i].AreaOverlaps(shapes[j]))
+            {
+                shapes[i].Shrink();
+                shapes[j].Shrink();
+                Console.WriteLine(n++);
+                shapes[j].Relocate();
+                shapes[i].Relocate();
+                CorrectOverlaps();
+            }
+        }
+    }
 }
