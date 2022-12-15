@@ -6,7 +6,7 @@ abstract class Shape
     public ConsoleColor Color { get; set; }
     public int Area { get { return _points.Count(); } }
     protected Random _random;
-    protected List<Point> _points;
+    public List<Point> _points;
 
     public Shape(ConsoleColor color, char theChar)
     {
@@ -34,9 +34,8 @@ abstract class Shape
 
     public bool AreaOverlaps(Shape otherShape)
     {
-        foreach (Point point1 in _points)
-            foreach (Point point2 in otherShape._points)
-                if (point1.Equals(point2)) return true;
+        foreach (Point point in otherShape._points)
+            if (IsHit(point)) return true;
         return false;
     }
 

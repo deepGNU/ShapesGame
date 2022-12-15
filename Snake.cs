@@ -7,7 +7,7 @@ class Snake
     private Point _prevHeadPosition;
     private List<Point> _path;
     private int _maxX = Console.WindowWidth - 1;
-    private int _maxY = Console.WindowHeight - 1;
+    private int _maxY = Console.WindowHeight - 2;
     private const char _CHAR = '*';
     private const ConsoleColor _HEAD_COLOR = ConsoleColor.White;
     private const ConsoleColor _PATH_COLOR = ConsoleColor.Blue;
@@ -36,7 +36,6 @@ class Snake
             DrawMove();
             _path.Add(_prevHeadPosition);
             Score++;
-            Thread.Sleep(50);
             while (Console.KeyAvailable)
                 Console.ReadKey(true);
         }
@@ -49,7 +48,7 @@ class Snake
 
     private void MoveUp()
     {
-        if (_headPosition.Y > 1)
+        if (_headPosition.Y > 0)
             _headPosition.Y--;
     }
 

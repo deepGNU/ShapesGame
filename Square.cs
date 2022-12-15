@@ -3,8 +3,8 @@ class Square : Shape
     static int _minSize = 3;
     static int _maxSize = 10;
     private int _size;
-
-    public Square(ConsoleColor color, char theChar = 'ם')
+    //▢
+    public Square(ConsoleColor color, char theChar = "\0xD7".ToCharArray()[0])
         : base(color, theChar) { }
 
     protected override void SetTopLeft()

@@ -1,136 +1,90 @@
 ﻿using System.Diagnostics;
 
-Snake snek;
-List<Shape> shapes = new List<Shape>();
-Random _random = new Random();
-const int MAX_SHAPES = 14;
-const int INITAL_SHAPES = 6;
-const int TOTAL_ROUNDS = MAX_SHAPES - INITAL_SHAPES + 1;
-int maxX = 80;
-int maxY = 25;
-Console.SetWindowSize(maxX, maxY + 1);
-Console.CursorVisible = false;
-Console.OutputEncoding = System.Text.Encoding.UTF8;
-
-Type[] types = new Type[]
-{ typeof(Line), typeof(Square),
-  typeof(Rectangle), typeof(Triangle) };
-
-Dictionary<Type, Func<Shape>> ctorDict =
-        new Dictionary<Type, Func<Shape>>();
-
-ctorDict[typeof(Line)] = () => new Line(RandomColor());
-ctorDict[typeof(Square)] = () => new Square(RandomColor());
-ctorDict[typeof(Rectangle)] = () => new Rectangle(RandomColor());
-ctorDict[typeof(Triangle)] = () => new Triangle(RandomColor());
-
-Func<Shape> RandomShape = () => ctorDict[types[_random.Next(types.Length)]]();
-
-Stopwatch stopwatch = Stopwatch.StartNew();
-
-for (int numOfShapes = INITAL_SHAPES; numOfShapes <= MAX_SHAPES; numOfShapes++)
+class Program
 {
-    PlayRound(numOfShapes);
-}
+    const int MAX_SHAPES = 14;
+    const int INITAL_SHAPES = 6;
+    const int TOTAL_ROUNDS = MAX_SHAPES - INITAL_SHAPES + 1;
+    static Snake snek;
+    static RandomShapeList shapes;
+    static int maxX = 80;
+    static int maxY = 25;
 
-stopwatch.Stop();
-
-Console.Clear();
-Console.SetCursorPosition(0, 0);
-Console.WriteLine("GAME OVER");
-Console.WriteLine($"YOUR SCORE: {Snake.Score} POINTS");
-Console.WriteLine($"NUMBER OF ROUNDS PLAYED: {TOTAL_ROUNDS}");
-Console.WriteLine($"ELAPSED TIME: {Math.Round(stopwatch.Elapsed.TotalSeconds, 2, MidpointRounding.ToZero)} SECONDS");
-Thread.Sleep(9000);
-
-void PlayRound(int numOfShapes)
-{
-    Console.Clear();
-
-    shapes = new List<Shape>();
-
-    for (int i = 0; i < numOfShapes; i++)
-        shapes.Add(RandomShape());
-
-    CorrectOverlaps();
-
-    foreach (var shape in shapes)
-        shape.Draw();
-
-    snek = new Snake(RandomStartPoint());
-
-    while (!IsShapeHit(snek.Head) && !snek.IsSteppingOnSelf())
+    static void Main(string[] args)
     {
-        PrintGameState(numOfShapes);
-        snek.Move();
+        Console.SetWindowSize(maxX, maxY + 1);
+        //Console.SetBufferSize(maxX, maxY + 1);
+        Console.CursorVisible = false;
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        Console.OutputEncoding = System.Text.Encoding.Unicode;
+        
+        Stopwatch stopwatch = Stopwatch.StartNew();
+
+        for (int numOfShapes = INITAL_SHAPES; numOfShapes <= MAX_SHAPES; numOfShapes++)
+            PlayRound(numOfShapes);
+
+        stopwatch.Stop();
+        Console.Clear();
+        Console.SetCursorPosition(0, 0);
+        Console.ResetColor();
+        Console.WriteLine("GAME OVER");
+        Console.WriteLine($"YOUR SCORE: {Snake.Score} POINTS");
+        Console.WriteLine($"ROUNDS PLAYED: {TOTAL_ROUNDS}");
+        Console.WriteLine($"TIME: {stopwatch.Elapsed.TotalSeconds:0.0} SECONDS");
+        Console.WriteLine("\nPress any key to continue...");
+        Console.ReadKey(true);
     }
-}
 
-bool IsShapeHit(Point point)
-{
-    foreach (var shape in shapes)
-        if (shape.IsHit(point)) return true;
-    return false;
-}
-
-Point RandomStartPoint()
-{
-    Point point;
-    do
+    static void PlayRound(int numOfShapes)
     {
-        point = Point.GetRandom(maxX, maxY, 1, 1);
-    } while (IsShapeHit(point));
-    return point;
-}
+        Console.Clear();
+        shapes = new RandomShapeList(numOfShapes);
+        snek = new Snake(RandomStartPoint());
 
-ConsoleColor RandomColor()
-{
-    Array colors = ((IEnumerable<ConsoleColor>)
-        Enum.GetValues(typeof(ConsoleColor)))
-        .Where(x => x != ConsoleColor.Black).ToArray();
-
-    return (ConsoleColor)colors.GetValue(_random.Next(colors.Length));
-}
-
-//int GetRemainingArea()
-//{
-//    return GetTotalArea() - GetShapesArea() - snek.Area;
-//}
-
-//int GetShapesArea()
-//{
-//    return shapes.Aggregate((s1, s2) => s1.Area + s2.Area);
-//}
-
-//int GetTotalArea()
-//{
-//    return maxX * maxY;
-//}
-
-void PrintGameState(int numShapes)
-{
-    Console.SetCursorPosition(0, 0);
-    Console.Write($"\tTOTAL SCORE: {Snake.Score}");
-    Console.Write(" | ");
-    Console.Write($"ROUND {numShapes - INITAL_SHAPES + 1} OUT OF {MAX_SHAPES - INITAL_SHAPES + 1}\t");
-}
-
-void CorrectOverlaps()
-{
-    for (int i = 0; i < shapes.Count(); i++)
-    {
-        for (int j = i + 1; j < shapes.Count(); j++)
+        while (!shapes.IsHit(snek.Head) && !snek.IsSteppingOnSelf())
         {
-            int n = 1;
-            if (shapes[i].AreaOverlaps(shapes[j]))
-            {
-                shapes[i].Shrink();
-                shapes[j].Shrink();
-                Console.WriteLine(n++);
-                shapes[j].Relocate();
-                shapes[i].Relocate();
-                CorrectOverlaps();
-            }
+            //PrintGameState(numOfShapes);
+            Thread.Sleep(50);
+            snek.Move();
         }
+
+        snek.Head.Draw('X', ConsoleColor.Red);
+        Console.Beep();
+        Thread.Sleep(1000);
+        while (Console.KeyAvailable)
+            Console.ReadKey(true);
     }
+
+    static Point RandomStartPoint()
+    {
+        Point point;
+        do
+        {
+            point = Point.GetRandom(maxX, maxY, 0, 1);
+        } while (shapes.IsHit(point));
+        return point;
+    }
+
+    static void PrintGameState(int numShapes)
+    {
+        Console.SetCursorPosition(0, 0);
+        Console.Write($"TOTAL SCORE: {Snake.Score}");
+        Console.Write(" | ");
+        Console.Write($"ROUND {numShapes - INITAL_SHAPES + 1} OUT OF {MAX_SHAPES - INITAL_SHAPES + 1}");
+    }
+
+    //int GetRemainingArea()
+    //{
+    //    return GetTotalArea() - GetShapesArea() - snek.Area;
+    //}
+
+    //int GetShapesArea()
+    //{
+    //    return shapes.Aggregate((s1, s2) => s1.Area + s2.Area);
+    //}
+
+    //int GetTotalArea()
+    //{
+    //    return maxX * maxY;
+    //}
 }

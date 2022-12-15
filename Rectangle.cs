@@ -4,7 +4,7 @@ class Rectangle : Shape
     static int _maxLength = 10;
     private int _width;
     private int _height;
-
+    //▢
     public Rectangle(ConsoleColor color, char theChar = 'ם')
         : base(color, theChar) { }
 
