@@ -5,7 +5,7 @@ class Triangle : Shape
     static int _maxSize = 9;
     private int _size;
 
-    public Triangle(ConsoleColor color, char theChar = '#')
+    public Triangle(ConsoleColor color, string theChar = "#")
         : base(color, theChar) { }
 
     protected override void SetTopLeft()

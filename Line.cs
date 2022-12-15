@@ -4,7 +4,7 @@ class Line : Shape
     private int _minLength = 2;
     private int _maxLength = 10;
 
-    public Line(ConsoleColor color, char theChar = '=')
+    public Line(ConsoleColor color, string theChar = "=")
         : base(color, theChar) { }
 
     protected override void SetTopLeft()

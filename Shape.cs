@@ -2,13 +2,13 @@ abstract class Shape
 {
     public int Top { get; set; }
     public int Left { get; set; }
-    public char TheChar { get; set; }
+    public string TheChar { get; set; }
     public ConsoleColor Color { get; set; }
     public int Area { get { return _points.Count(); } }
     protected Random _random;
     public List<Point> _points;
 
-    public Shape(ConsoleColor color, char theChar)
+    public Shape(ConsoleColor color, string theChar)
     {
         Color = color;
         TheChar = theChar;

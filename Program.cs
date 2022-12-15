@@ -48,7 +48,7 @@ class Program
             snek.Move();
         }
 
-        snek.Head.Draw('X', ConsoleColor.Red);
+        snek.Head.Draw("X", ConsoleColor.Red);
         Console.Beep();
         Thread.Sleep(1000);
         while (Console.KeyAvailable)

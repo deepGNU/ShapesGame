@@ -18,7 +18,9 @@ class RandomShapeList
 
         CorrectOverlaps();
 
-        foreach (var shape in shapes)
+        List<Shape> sortedShapes = shapes.OrderBy(shape => shape.Left).ToList();
+
+        foreach (var shape in sortedShapes)
             shape.Draw();
     }
 

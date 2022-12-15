@@ -8,7 +8,7 @@ class Snake
     private List<Point> _path;
     private int _maxX = Console.WindowWidth - 1;
     private int _maxY = Console.WindowHeight - 2;
-    private const char _CHAR = '*';
+    private const string _CHAR = "*";
     private const ConsoleColor _HEAD_COLOR = ConsoleColor.White;
     private const ConsoleColor _PATH_COLOR = ConsoleColor.Blue;
 

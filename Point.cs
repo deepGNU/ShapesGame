@@ -34,7 +34,7 @@
     //    Console.Write(charToDraw);
     //}
 
-    public void Draw(char charToDraw, ConsoleColor color)
+    public void Draw(string charToDraw, ConsoleColor color)
     {
         // Set the text alignment of the console to LTR
         System.Console.SetWindowPosition(0, 0);
