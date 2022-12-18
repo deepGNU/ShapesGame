@@ -12,6 +12,8 @@ class Rectangle : Shape
     {
         Top = _random.Next(1, Console.WindowHeight - _height);
         Left = _random.Next(Console.WindowWidth - _width);
+        //Top = Console.WindowHeight - _height;
+        //Left = 0;
     }
 
     protected override void SetDimensions()

@@ -10,7 +10,7 @@ class Triangle : Shape
 
     protected override void SetTopLeft()
     {
-        Top = _random.Next(1, Console.WindowHeight - _size);
+        Top = _random.Next(2, Console.WindowHeight - _size);
         Left = _random.Next(Console.WindowWidth - _size);
     }
 

@@ -43,9 +43,7 @@ class RandomShapeList
     private void CorrectOverlaps()
     {
         for (int i = 0; i < shapes.Count(); i++)
-        {
             for (int j = i + 1; j < shapes.Count(); j++)
-            {
                 if (shapes[i].AreaOverlaps(shapes[j]))
                 {
                     shapes[i].Shrink();
@@ -54,7 +52,5 @@ class RandomShapeList
                     shapes[j].Relocate();
                     CorrectOverlaps();
                 }
-            }
-        }
     }
 }

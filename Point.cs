@@ -2,7 +2,7 @@
 {
     public int X { get; set; }
     public int Y { get; set; }
-    static Random _random= new Random();
+    static Random _random = new Random();
 
     public Point() { }
     public Point(int x, int y)
@@ -21,40 +21,23 @@
         return p.X == X && p.Y == Y;
     }
 
-    //public void Draw(char charToDraw, ConsoleColor color)
-    //{
-    //    System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("he-IL");
-    //    System.Threading.Thread.CurrentThread.CurrentCulture = ci;
-    //    // Set the text alignment of the console to LTR
-    //    System.Console.SetWindowPosition(0, 0);
-    //    System.Console.SetWindowSize(System.Console.WindowWidth, System.Console.WindowHeight);
-
-    //    Console.ForegroundColor = color;
-    //    Console.SetCursorPosition(X, Y);
-    //    Console.Write(charToDraw);
-    //}
-
     public void Draw(string charToDraw, ConsoleColor color)
     {
-        // Set the text alignment of the console to LTR
-        System.Console.SetWindowPosition(0, 0);
-        System.Console.SetWindowSize(System.Console.WindowWidth, System.Console.WindowHeight);
-        // Set the output encoding of the console to UTF-8
-        System.Console.OutputEncoding = System.Text.Encoding.UTF8;
-
         Console.ForegroundColor = color;
-        //Console.SetCursorPosition(X, Y);
-        Console.CursorLeft = X;
-        Console.CursorTop = Y;
-        Console.Write(charToDraw);
-    }
+        Console.SetCursorPosition(X, Y);
 
-
-    public static string Reverse(string s)
-    {
-        char[] charArray = s.ToCharArray();
-        Array.Reverse(charArray);
-        return new string(charArray);
+        if (Y == Console.WindowHeight - 1)
+        {
+            Console.Write(charToDraw);
+        }
+        else if (X == Console.WindowWidth - 1)
+        {
+            Console.WriteLine(charToDraw[0]);
+        }
+        else
+        {
+            Console.WriteLine(charToDraw);
+        }
     }
 
     public static Point GetRandom(int maxX, int maxY, int minX = 0, int minY = 0)
