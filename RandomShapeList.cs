@@ -1,18 +1,12 @@
 class RandomShapeList
 {
     static Random _random = new Random();
-    static Type[] types = new Type[] { typeof(Line), typeof(Square), typeof(Rectangle), typeof(Triangle) };
-    static Dictionary<Type, Func<Shape>> ctorDict = new Dictionary<Type, Func<Shape>>();
-    static Func<Shape> RandomShape = () => ctorDict[types[_random.Next(types.Length)]]();
+    static Func<Shape>[] shapeCtorArr = { () => new Line(RandomColor()), () => new Square(RandomColor()), () => new Rectangle(RandomColor()), () => new Triangle(RandomColor()) };
+    static Func<Shape> RandomShape = () => shapeCtorArr[_random.Next(shapeCtorArr.Length)]();
     private List<Shape> shapes = new List<Shape>();
 
     public RandomShapeList(int numOfShapes)
     {
-        ctorDict[typeof(Line)] = () => new Line(RandomColor());
-        ctorDict[typeof(Square)] = () => new Square(RandomColor());
-        ctorDict[typeof(Rectangle)] = () => new Rectangle(RandomColor());
-        ctorDict[typeof(Triangle)] = () => new Triangle(RandomColor());
-
         for (int i = 0; i < numOfShapes; i++)
             shapes.Add(RandomShape());
 
@@ -47,8 +41,8 @@ class RandomShapeList
                 if (shapes[i].AreaOverlaps(shapes[j]))
                 {
                     shapes[i].Shrink();
-                    shapes[j].Shrink();
-                    shapes[i].Relocate();
+                    //shapes[j].Shrink();
+                    //shapes[i].Relocate();
                     shapes[j].Relocate();
                     CorrectOverlaps();
                 }

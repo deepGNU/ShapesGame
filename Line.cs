@@ -9,8 +9,8 @@ class Line : Shape
 
     protected override void SetTopLeft()
     {
-        Left = _random.Next(Console.WindowWidth - Length);
-        Top = _random.Next(2, Console.WindowHeight - 1);
+        Top = _random.Next(1, Console.WindowHeight - 1);
+        Left = _random.Next(1, Console.WindowWidth - Length);
     }
 
     protected override void SetDimensions()

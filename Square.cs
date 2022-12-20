@@ -3,14 +3,14 @@ class Square : Shape
     static int _minSize = 3;
     static int _maxSize = 10;
     private int _size;
-    //'▢'
+    
     public Square(ConsoleColor color, string theChar = "ם\u200E")
         : base(color, theChar) { }
 
     protected override void SetTopLeft()
     {
         Top = _random.Next(1, Console.WindowHeight - _size);
-        Left = _random.Next(Console.WindowWidth - _size);
+        Left = _random.Next(1, Console.WindowWidth - _size);
     }
 
     protected override void SetDimensions()

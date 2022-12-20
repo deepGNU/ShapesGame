@@ -6,8 +6,8 @@ class Snake
     private Point _headPosition;
     private Point _prevHeadPosition;
     private List<Point> _path;
-    private int _maxX = Console.WindowWidth - 1;
-    private int _maxY = Console.WindowHeight - 1;
+    private int _maxX = Console.WindowWidth - 2;
+    private int _maxY = Console.WindowHeight - 2;
     private const string _CHAR = "*";
     private const ConsoleColor _HEAD_COLOR = ConsoleColor.White;
     private const ConsoleColor _PATH_COLOR = ConsoleColor.Blue;
@@ -21,7 +21,6 @@ class Snake
 
     public void Move()
     {
-        Thread.Sleep(50);
         _prevHeadPosition = _headPosition.Clone();
 
         switch (Console.ReadKey(true).Key)
@@ -32,14 +31,7 @@ class Snake
             case ConsoleKey.LeftArrow:  MoveLeft();  break;
         }
 
-        if (DidMove())
-        {
-            DrawMove();
-            _path.Add(_prevHeadPosition);
-            Score++;
-            while (Console.KeyAvailable)
-                Console.ReadKey(true);
-        }
+        if (DidMove()) HandleMove();
     }
 
     private bool DidMove()
@@ -49,7 +41,7 @@ class Snake
 
     private void MoveUp()
     {
-        if (_headPosition.Y > Program.firstRow)
+        if (_headPosition.Y > 1)
             _headPosition.Y--;
     }
 
@@ -67,7 +59,7 @@ class Snake
 
     private void MoveLeft()
     {
-        if (_headPosition.X > 0)
+        if (_headPosition.X > 1)
             _headPosition.X--;
     }
 
@@ -82,5 +74,29 @@ class Snake
         foreach (Point point in _path)
             if (_headPosition.Equals(point)) return true;
         return false;
+    }
+
+    private void HandleMove()
+    {
+        Score++;
+        _path.Add(_prevHeadPosition);
+        DrawMove();
+        Thread.Sleep(50);
+        FlushKeyboard();
+    }
+
+    public void HandleCollision()
+    {
+        Score--;
+        _headPosition.Draw("X", ConsoleColor.Red);
+        Console.Beep();
+        Thread.Sleep(1000);
+        FlushKeyboard();
+    }
+
+    private void FlushKeyboard()
+    {
+        while (Console.KeyAvailable)
+            Console.ReadKey(true);
     }
 }

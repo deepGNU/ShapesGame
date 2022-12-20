@@ -13,10 +13,10 @@ class Program
 
     static void Main(string[] args)
     {
-        Console.SetWindowPosition(0, 0);
-        Console.SetWindowSize(maxX, maxY);
-        Console.CursorVisible = false;
         Console.OutputEncoding = System.Text.Encoding.UTF8;
+        Console.CursorVisible = false;
+        Console.SetWindowPosition(0, 0);
+        Console.SetWindowSize(maxX + 2, maxY + 2);
         Stopwatch stopwatch = Stopwatch.StartNew();
 
         for (int numOfShapes = INITAL_SHAPES; numOfShapes <= MAX_SHAPES; numOfShapes++)
@@ -37,11 +37,10 @@ class Program
     static void PlayRound(int numOfShapes)
     {
         Console.Clear();
-        PrintBorder();
-        //Console.SetWindowPosition(0, 0);
-        //Console.SetWindowSize(maxX, maxY);
-        shapes = new RandomShapeList(numOfShapes);
-        snek = new Snake(RandomStartPoint());
+        DrawBorders();
+
+        shapes = new(numOfShapes);
+        snek = new(RandomStartPoint());
 
         while (!shapes.IsHit(snek.Head) && !snek.IsSteppingOnSelf())
         {
@@ -49,12 +48,7 @@ class Program
             snek.Move();
         }
 
-        snek.Head.Draw("X", ConsoleColor.Red);
-        Console.Beep();
-        Snake.Score--;
-        Thread.Sleep(1000);
-        while (Console.KeyAvailable)
-            Console.ReadKey(true);
+        snek.HandleCollision();
     }
 
     static Point RandomStartPoint()
@@ -69,25 +63,35 @@ class Program
 
     static void PrintGameState(int numShapes)
     {
-        PrintBorder();
-        string mssg = $"TOTAL SCORE: {Snake.Score} | " +
+        string str = $"TOTAL SCORE: {Snake.Score} | " +
             $"ROUND {numShapes - INITAL_SHAPES + 1} OUT OF {MAX_SHAPES - INITAL_SHAPES + 1}";
-        Console.SetCursorPosition(Console.WindowWidth / 2 - mssg.Length / 2, 0);
-        Console.WriteLine(mssg);
-
-        //Console.Write($"TOTAL SCORE: {Snake.Score}");
-        //Console.Write(" | ");
-        //Console.Write($"ROUND {numShapes - INITAL_SHAPES + 1} OUT OF {MAX_SHAPES - INITAL_SHAPES + 1}");
+        Console.SetCursorPosition(Console.WindowWidth / 2 - str.Length / 2, 0);
+        Console.WriteLine(str);
     }
 
-    static void PrintBorder()
+    static void DrawBorders()
     {
         Console.ResetColor();
-        Console.SetCursorPosition(0, 0);
+        Console.SetCursorPosition(1, 0);
 
-        for (int i = 0; i < Console.WindowWidth; i++)
+        for (int i = 1; i < Console.WindowWidth - 1; i++)
             Console.Write('_');
         Console.WriteLine();
+
+        for (int i = 1; i < Console.WindowHeight - 1; i++)
+        {
+            Console.SetCursorPosition(0, i);
+            Console.WriteLine('|');
+            Console.SetCursorPosition(Console.WindowWidth - 1, i);
+            Console.WriteLine('|');
+        }
+
+        Console.SetCursorPosition(1, Console.WindowHeight - 1);
+
+        for (int i = 1; i < Console.WindowWidth - 1; i++)
+        {
+            Console.Write('‾');
+        }
     }
 
     //int GetRemainingArea()

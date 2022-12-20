@@ -27,20 +27,14 @@
         Console.SetCursorPosition(X, Y);
 
         if (Y == Console.WindowHeight - 1)
-        {
             Console.Write(charToDraw);
-        }
-        else if (X == Console.WindowWidth - 1)
-        {
+        else if (X == Console.WindowWidth - 2)
             Console.WriteLine(charToDraw[0]);
-        }
         else
-        {
             Console.WriteLine(charToDraw);
-        }
     }
 
-    public static Point GetRandom(int maxX, int maxY, int minX = 0, int minY = 0)
+    public static Point GetRandom(int maxX, int maxY, int minX = 0, int minY = 1)
     {
         int x = _random.Next(minX, maxX);
         int y = _random.Next(minY, maxY);
