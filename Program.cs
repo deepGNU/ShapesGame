@@ -2,14 +2,19 @@
 
 class Program
 {
-    public static int firstRow = 1;
-    const int MAX_SHAPES = 14;
-    const int INITAL_SHAPES = 6;
-    const int TOTAL_ROUNDS = MAX_SHAPES - INITAL_SHAPES + 1;
+    const int MAX_SHAPES = 14, MIN_SHAPES = 6;
+    const int MAX_ROUNDS = MAX_SHAPES - MIN_SHAPES + 1;
+    static int numShapes;
     static Snake snek;
     static RandomShapeList shapes;
     static int maxX = 80;
     static int maxY = 25;
+    static List<Point> pointsOnBoard = Enumerable.Range(1, maxX)
+            .Select(x => 
+                Enumerable.Range(1, maxY)
+                .Select(y => new Point(x, y)))
+            .SelectMany(e => e)
+            .ToList();
 
     static void Main(string[] args)
     {
@@ -17,10 +22,11 @@ class Program
         Console.CursorVisible = false;
         Console.SetWindowPosition(0, 0);
         Console.SetWindowSize(maxX + 2, maxY + 2);
+        Console.SetBufferSize(maxX + 2, maxY + 2);
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        for (int numOfShapes = INITAL_SHAPES; numOfShapes <= MAX_SHAPES; numOfShapes++)
-            PlayRound(numOfShapes);
+        for (numShapes = MIN_SHAPES; numShapes <= MAX_SHAPES; numShapes++)
+            PlayRound();
 
         stopwatch.Stop();
         Console.Clear();
@@ -28,45 +34,71 @@ class Program
         Console.ResetColor();
         Console.WriteLine("GAME OVER");
         Console.WriteLine($"SCORE: {Snake.Score} POINTS");
-        Console.WriteLine($"ROUNDS PLAYED: {TOTAL_ROUNDS}");
+        Console.WriteLine($"ROUNDS PLAYED: {MAX_ROUNDS}");
         Console.WriteLine($"TIME: {stopwatch.Elapsed.TotalSeconds:0.0} SECONDS");
         Console.WriteLine("\nPress any key to continue...");
         Console.ReadKey(true);
     }
 
-    static void PlayRound(int numOfShapes)
+    static void PlayRound()
     {
         Console.Clear();
+        PrintLTRs(); // Filling screen with LTR marks to avoid problems with Hebrew letter 'ם'.
         DrawBorders();
 
-        shapes = new(numOfShapes);
+        shapes = new(numShapes);
         snek = new(RandomStartPoint());
 
         while (!shapes.IsHit(snek.Head) && !snek.IsSteppingOnSelf())
         {
-            PrintGameState(numOfShapes);
+            PrintGameState();
             snek.Move();
         }
+
+        if (snek.IsSteppingOnSelf())
+            snek.MarkHit();
+        else
+            shapes.MarkHit(snek.Head);
 
         snek.HandleCollision();
     }
 
     static Point RandomStartPoint()
     {
+        //return kosherPoints[new Random().Next(kosherPoints.Count())];
         Point point;
         do
         {
-            point = Point.GetRandom(maxX, maxY, 0, firstRow);
+            point = Point.GetRandom(maxX, maxY, 1, 1);
         } while (shapes.IsHit(point));
         return point;
     }
 
-    static void PrintGameState(int numShapes)
+    static void PrintGameState()
     {
-        string str = $"TOTAL SCORE: {Snake.Score} | " +
-            $"ROUND {numShapes - INITAL_SHAPES + 1} OUT OF {MAX_SHAPES - INITAL_SHAPES + 1}";
-        Console.SetCursorPosition(Console.WindowWidth / 2 - str.Length / 2, 0);
+        string str = $"ROUND {GetCurrRound()} OUT OF {MAX_ROUNDS}"
+            + $" | TOTAL SCORE: {Snake.Score}";
+        Console.SetCursorPosition((Console.WindowWidth / 2) - (str.Length / 2) - 1, 0);
         Console.WriteLine(str);
+    }
+
+    static int GetCurrRound()
+    {
+        return numShapes - MIN_SHAPES + 1;
+    }
+
+    static void PrintLTRs()
+    {
+        Console.SetCursorPosition(0, 0);
+        for (int j = 0; j < Console.WindowHeight; j++)
+        {
+            Console.SetCursorPosition(0, j);
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                Console.Write("\u200E");
+            }
+            Console.WriteLine();
+        }
     }
 
     static void DrawBorders()

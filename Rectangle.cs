@@ -4,9 +4,9 @@ class Rectangle : Shape
     static int _maxLength = 10;
     private int _width;
     private int _height;
-    
-    public Rectangle(ConsoleColor color, string theChar = "ם\u200E")
-        : base(color, theChar) { }
+
+    public Rectangle(char theChar = 'ם')
+        : base(theChar) { }
 
     protected override void SetTopLeft()
     {
@@ -22,14 +22,16 @@ class Rectangle : Shape
 
     protected override void SetPoints()
     {
+        Points = new List<Point>();
         for (int i = 0; i < _height; i++)
             for (int j = 0; j < _width; j++)
-                _points.Add(new Point(Left + j, Top + i));
+                Points.Add(new Point(Left + j, Top + i));
     }
 
     public override void Shrink()
     {
         if (_width > _minLength) _width--;
         if (_height > _minLength) _height--;
+        SetPoints();
     }
 }

@@ -3,9 +3,9 @@ class Square : Shape
     static int _minSize = 3;
     static int _maxSize = 10;
     private int _size;
-    
-    public Square(ConsoleColor color, string theChar = "ם\u200E")
-        : base(color, theChar) { }
+
+    public Square(char theChar = 'ם')
+        : base(theChar) { }
 
     protected override void SetTopLeft()
     {
@@ -15,18 +15,21 @@ class Square : Shape
 
     protected override void SetDimensions()
     {
-        _size = _random.Next(_minSize, _maxSize + 1);
+        //_size = _random.Next(_minSize, _maxSize + 1);
+        _size = _maxSize;
     }
 
     protected override void SetPoints()
     {
+        Points = new List<Point>();
         for (int i = 0; i < _size; i++)
             for (int j = 0; j < _size; j++)
-                _points.Add(new Point(Left + j, Top + i));
+                Points.Add(new Point(Left + j, Top + i));
     }
 
     public override void Shrink()
     {
         if (_size > _minSize) _size--;
+        SetPoints();
     }
 }

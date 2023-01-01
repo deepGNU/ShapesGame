@@ -5,16 +5,16 @@ class Snake
     public int Area { get { return _path.Count() + 1; } }
     private Point _headPosition;
     private Point _prevHeadPosition;
-    private List<Point> _path;
+    private List<Point> _path = new();
     private int _maxX = Console.WindowWidth - 2;
     private int _maxY = Console.WindowHeight - 2;
-    private const string _CHAR = "*";
+    private const char _CHAR = '*';
+    private const char _CRASH_CHAR = 'X';
     private const ConsoleColor _HEAD_COLOR = ConsoleColor.White;
     private const ConsoleColor _PATH_COLOR = ConsoleColor.Blue;
 
     public Snake(Point start)
     {
-        _path = new List<Point>();
         _headPosition = _prevHeadPosition = start;
         _headPosition.Draw(_CHAR, _HEAD_COLOR);
     }
@@ -25,16 +25,16 @@ class Snake
 
         switch (Console.ReadKey(true).Key)
         {
-            case ConsoleKey.UpArrow:    MoveUp();    break;
-            case ConsoleKey.DownArrow:  MoveDown();  break;
+            case ConsoleKey.UpArrow: MoveUp(); break;
+            case ConsoleKey.DownArrow: MoveDown(); break;
             case ConsoleKey.RightArrow: MoveRight(); break;
-            case ConsoleKey.LeftArrow:  MoveLeft();  break;
+            case ConsoleKey.LeftArrow: MoveLeft(); break;
         }
 
         if (DidMove()) HandleMove();
     }
 
-    private bool DidMove()
+    public bool DidMove()
     {
         return !_headPosition.Equals(_prevHeadPosition);
     }
@@ -76,7 +76,13 @@ class Snake
         return false;
     }
 
-    private void HandleMove()
+    public void MarkHit()
+    {
+        foreach (var point in _path)
+            point.Draw('X', ConsoleColor.White);
+    }
+
+    public void HandleMove()
     {
         Score++;
         _path.Add(_prevHeadPosition);
@@ -88,10 +94,19 @@ class Snake
     public void HandleCollision()
     {
         Score--;
-        _headPosition.Draw("X", ConsoleColor.Red);
         Console.Beep();
-        Thread.Sleep(1000);
+        FlashCrash();
         FlushKeyboard();
+    }
+
+    private void FlashCrash()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            ConsoleColor color = i % 2 == 0 ? ConsoleColor.Red : ConsoleColor.White;
+            _headPosition.Draw(_CRASH_CHAR, color);
+            Thread.Sleep(200);
+        }
     }
 
     private void FlushKeyboard()

@@ -5,8 +5,8 @@ class Triangle : Shape
     static int _maxSize = 9;
     private int _size;
 
-    public Triangle(ConsoleColor color, string theChar = "#")
-        : base(color, theChar) { }
+    public Triangle(char theChar = '#')
+        : base(theChar) { }
 
     protected override void SetTopLeft()
     {
@@ -21,13 +21,15 @@ class Triangle : Shape
 
     protected override void SetPoints()
     {
+        Points = new List<Point>();
         for (int y = 0; y < _size; y++)
             for (int x = 0; x <= y; x++)
-                _points.Add(new Point(Left + x, Top + y));
+                Points.Add(new Point(Left + x, Top + y));
     }
 
     public override void Shrink()
     {
         if (_size > _minSize) _size--;
+        SetPoints();
     }
 }

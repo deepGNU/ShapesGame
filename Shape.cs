@@ -2,18 +2,16 @@ abstract class Shape
 {
     public int Top { get; set; }
     public int Left { get; set; }
-    public string TheChar { get; set; }
+    public char TheChar { get; set; }
     public ConsoleColor Color { get; set; }
-    public int Area { get { return _points.Count(); } }
-    protected Random _random;
-    public List<Point> _points;
+    public int Area { get { return Points.Count(); } }
+    protected static Random _random = new();
+    public List<Point> Points;
 
-    public Shape(ConsoleColor color, string theChar)
+    public Shape(char theChar)
     {
-        Color = color;
         TheChar = theChar;
-        _random = new Random();
-        _points = new List<Point>();
+        Color = GetRandomColor();
         SetDimensions();
         SetTopLeft();
         SetPoints();
@@ -21,29 +19,44 @@ abstract class Shape
 
     public void Draw()
     {
-        foreach (Point point in _points)
+        foreach (Point point in Points)
             point.Draw(TheChar, Color);
+    }
+
+    public void MarkHit()
+    {
+        foreach (Point point in Points)
+            point.Draw('X', ConsoleColor.White);
     }
 
     public bool IsHit(Point p)
     {
-        foreach (var point in _points)
+        foreach (var point in Points)
             if (point.Equals(p)) return true;
         return false;
     }
 
     public bool AreaOverlaps(Shape otherShape)
     {
-        foreach (Point point in otherShape._points)
+        foreach (Point point in otherShape.Points)
             if (IsHit(point)) return true;
         return false;
     }
 
-    public void Relocate()
+    //public void Relocate()
+    //{
+    //    SetTopLeft();
+    //    Points = new List<Point>();
+    //    SetPoints();
+    //}
+
+    static ConsoleColor GetRandomColor()
     {
-        SetTopLeft();
-        _points = new List<Point>();
-        SetPoints();
+        Array colors = ((IEnumerable<ConsoleColor>)
+            Enum.GetValues(typeof(ConsoleColor)))
+            .Where(x => x != ConsoleColor.Black).ToArray();
+
+        return (ConsoleColor)colors.GetValue(_random.Next(colors.Length));
     }
 
     abstract protected void SetTopLeft();

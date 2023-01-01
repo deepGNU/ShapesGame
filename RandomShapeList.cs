@@ -1,21 +1,36 @@
 class RandomShapeList
 {
-    static Random _random = new Random();
-    static Func<Shape>[] shapeCtorArr = { () => new Line(RandomColor()), () => new Square(RandomColor()), () => new Rectangle(RandomColor()), () => new Triangle(RandomColor()) };
-    static Func<Shape> RandomShape = () => shapeCtorArr[_random.Next(shapeCtorArr.Length)]();
     private List<Shape> shapes = new List<Shape>();
+    static Func<Shape>[] shapeCtorArr = {
+                                          () => new Line(),
+                                          () => new Square(),
+                                          () => new Rectangle(),
+                                          () => new Triangle()
+                                        };
 
-    public RandomShapeList(int numOfShapes)
+    public RandomShapeList(int numShapes)
     {
-        for (int i = 0; i < numOfShapes; i++)
-            shapes.Add(RandomShape());
+        for (int i = 0; i < numShapes; i++)
+            AddShape();
 
-        CorrectOverlaps();
-
-        List<Shape> sortedShapes = shapes.OrderBy(shape => shape.Left).ToList();
-
-        foreach (var shape in sortedShapes)
+        foreach (var shape in shapes)
             shape.Draw();
+    }
+
+    private void AddShape()
+    {
+        const int MAX_COUNT = 9;
+        int count = 0;
+        Shape newShape = GetRandomShape();
+
+        while (OverlapsOtherShape(newShape))
+        {
+            newShape = GetRandomShape();
+            if (++count == MAX_COUNT) ShrinkShapes();
+            count %= MAX_COUNT;
+        }
+
+        shapes.Add(newShape);
     }
 
     public bool IsHit(Point point)
@@ -25,26 +40,29 @@ class RandomShapeList
         return false;
     }
 
-    static ConsoleColor RandomColor()
+    public void MarkHit(Point point)
     {
-        Array colors = ((IEnumerable<ConsoleColor>)
-            Enum.GetValues(typeof(ConsoleColor)))
-            .Where(x => x != ConsoleColor.Black).ToArray();
-
-        return (ConsoleColor)colors.GetValue(_random.Next(colors.Length));
+        foreach (var shape in shapes)
+            if (shape.IsHit(point)) { shape.MarkHit(); break; }
     }
 
-    private void CorrectOverlaps()
+    private static Shape GetRandomShape()
     {
-        for (int i = 0; i < shapes.Count(); i++)
-            for (int j = i + 1; j < shapes.Count(); j++)
-                if (shapes[i].AreaOverlaps(shapes[j]))
-                {
-                    shapes[i].Shrink();
-                    //shapes[j].Shrink();
-                    //shapes[i].Relocate();
-                    shapes[j].Relocate();
-                    CorrectOverlaps();
-                }
+        int randomShapeCtorIndex = new Random().Next(shapeCtorArr.Length);
+        Func<Shape> randomShapeCtor = shapeCtorArr[randomShapeCtorIndex];
+        return randomShapeCtor();
+    }
+
+    private bool OverlapsOtherShape(Shape shape)
+    {
+        foreach (var otherShape in shapes)
+            if (shape.AreaOverlaps(otherShape)) return true;
+        return false;
+    }
+
+    private void ShrinkShapes()
+    {
+        foreach (var shape in shapes)
+            shape.Shrink();
     }
 }

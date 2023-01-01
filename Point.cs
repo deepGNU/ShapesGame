@@ -4,7 +4,6 @@
     public int Y { get; set; }
     static Random _random = new Random();
 
-    public Point() { }
     public Point(int x, int y)
     {
         X = x;
@@ -21,20 +20,14 @@
         return p.X == X && p.Y == Y;
     }
 
-    public void Draw(string charToDraw, ConsoleColor color)
+    public void Draw(char charToDraw, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.SetCursorPosition(X, Y);
-
-        if (Y == Console.WindowHeight - 1)
-            Console.Write(charToDraw);
-        else if (X == Console.WindowWidth - 2)
-            Console.WriteLine(charToDraw[0]);
-        else
-            Console.WriteLine(charToDraw);
+        Console.WriteLine(charToDraw);
     }
 
-    public static Point GetRandom(int maxX, int maxY, int minX = 0, int minY = 1)
+    public static Point GetRandom(int maxX, int maxY, int minX = 1, int minY = 1)
     {
         int x = _random.Next(minX, maxX);
         int y = _random.Next(minY, maxY);
