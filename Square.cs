@@ -1,36 +1,34 @@
 class Square : Shape
 {
-    static int _minSize = 3;
-    static int _maxSize = 10;
-    private int _size;
-
     public Square(char theChar = 'ם')
         : base(theChar) { }
+
+    private const int MIN_SIZE = 3;
+    private const int MAX_SIZE = 10;
+    private int _size;
+
+    protected override void SetDimensions()
+    {
+        _size = _random.Next(MIN_SIZE, MAX_SIZE + 1);
+    }
 
     protected override void SetTopLeft()
     {
         Point point = Board.GetRandomPoint(Board.MaxX - _size + 1, Board.MaxY - _size + 1);
         (Left, Top) = (point.X, point.Y);
-        //Top = _random.Next(1, Console.WindowHeight - _size);
-        //Left = _random.Next(1, Console.WindowWidth - _size);
-    }
-
-    protected override void SetDimensions()
-    {
-        _size = _random.Next(_minSize, _maxSize + 1);
     }
 
     protected override void SetPoints()
     {
         Points = new List<Point>();
-        for (int i = 0; i < _size; i++)
-            for (int j = 0; j < _size; j++)
-                Points.Add(new Point(Left + j, Top + i));
+        for (int y = 0; y < _size; y++)
+            for (int x = 0; x < _size; x++)
+                Points.Add(new Point(Left + x, Top + y));
     }
 
     public override void Shrink()
     {
-        if (_size > _minSize) _size--;
+        if (_size > MIN_SIZE) _size--;
         SetPoints();
     }
 }

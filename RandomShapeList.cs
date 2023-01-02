@@ -1,5 +1,11 @@
 class RandomShapeList
 {
+    public RandomShapeList(int numShapes)
+    {
+        for (int i = 0; i < numShapes; i++)
+            AddShape();
+    }
+
     private List<Shape> shapes = new List<Shape>();
     static Func<Shape>[] shapeCtorArr = {
                                           () => new Line(),
@@ -8,13 +14,11 @@ class RandomShapeList
                                           () => new Triangle()
                                         };
 
-    public RandomShapeList(int numShapes)
+    public void Draw()
     {
-        for (int i = 0; i < numShapes; i++)
-            AddShape();
-
         foreach (var shape in shapes)
             shape.Draw();
+        Console.ResetColor();
     }
 
     private void AddShape()

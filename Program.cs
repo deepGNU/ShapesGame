@@ -3,14 +3,14 @@
 class Program
 {
     static int maxShapes = 14;
-    static int minShapes = new Random().Next(3,7);
+    static int minShapes = new Random().Next(3, 7);
     static int consoleWidth = Board.MaxX + 2;
     static int consoleHeight = Board.MaxY + 2;
     static int numFails = 0;
     static int numShapes;
     static Stopwatch stopwatch = new();
     static RandomShapeList shapes;
-    static Snake snek;
+    static Snake snake;
     static Point startPoint;
     static bool foundStartPoint = true;
 
@@ -46,13 +46,14 @@ class Program
         SetStartPointInMaxTries();
         // If start point not found within max allowed tries, ending round.
         if (!foundStartPoint) return;
-        snek = new(startPoint);
+        snake = new(startPoint);
+        shapes.Draw();
 
         stopwatch.Start();
-        while (!shapes.IsHit(snek.Head) && !snek.IsSteppingOnSelf())
+        while (!shapes.IsHit(snake.Head) && !snake.IsSteppingOnSelf())
         {
             PrintGameState();
-            snek.Move();
+            snake.Move();
         }
         stopwatch.Stop();
 
@@ -84,9 +85,9 @@ class Program
         Snake.Score--;
         numFails++;
         PrintGameState();
-        if (snek.IsSteppingOnSelf()) snek.MarkHit();
-        else shapes.MarkHit(snek.Head);
-        snek.IndicateCollision();
+        if (snake.IsSteppingOnSelf()) snake.MarkHit();
+        else shapes.MarkHit(snake.Head);
+        snake.IndicateCollision();
     }
 
     static void DisplayEndingMessage()

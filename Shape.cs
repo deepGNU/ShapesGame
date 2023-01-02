@@ -1,31 +1,30 @@
 abstract class Shape
 {
-    public int Top { get; set; }
-    public int Left { get; set; }
-    public char TheChar { get; set; }
-    public ConsoleColor Color { get; set; }
-    public int Area { get { return Points.Count(); } }
-    protected static Random _random = new();
-    public List<Point> Points;
-
-    public Shape(char theChar)
+    protected Shape(char theChar)
     {
         TheChar = theChar;
-        Color = GetRandomColor();
+        Color = RandomColor.Get();
         SetDimensions();
         SetTopLeft();
         SetPoints();
     }
 
+    protected int Top { get; set; }
+    protected int Left { get; set; }
+    protected char TheChar { get; set; }
+    protected List<Point> Points { get; set; }
+    private ConsoleColor Color { get; set; }
+    protected static Random _random = new();
+
     public void Draw()
     {
-        foreach (Point point in Points)
+        foreach (var point in Points)
             point.Draw(TheChar, Color);
     }
 
     public void MarkHit()
     {
-        foreach (Point point in Points)
+        foreach (var point in Points)
             point.Draw('X', ConsoleColor.White);
     }
 
@@ -38,18 +37,9 @@ abstract class Shape
 
     public bool AreaOverlaps(Shape otherShape)
     {
-        foreach (Point point in otherShape.Points)
+        foreach (var point in otherShape.Points)
             if (IsHit(point)) return true;
         return false;
-    }
-
-    static ConsoleColor GetRandomColor()
-    {
-        Array colors = ((IEnumerable<ConsoleColor>)
-            Enum.GetValues(typeof(ConsoleColor)))
-            .Where(x => x != ConsoleColor.Black).ToArray();
-
-        return (ConsoleColor)colors.GetValue(_random.Next(colors.Length));
     }
 
     abstract protected void SetTopLeft();

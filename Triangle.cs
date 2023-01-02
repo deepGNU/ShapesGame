@@ -1,23 +1,21 @@
 class Triangle : Shape
 {
-    static int _minSize = 2;
-    static int _maxSize = 9;
-    private int _size;
-
     public Triangle(char theChar = '#')
         : base(theChar) { }
+
+    private const int MIN_SIZE = 2;
+    private const int MAX_SIZE = 9;
+    private int _size;
+
+    protected override void SetDimensions()
+    {
+        _size = _random.Next(MIN_SIZE, MAX_SIZE + 1);
+    }
 
     protected override void SetTopLeft()
     {
         Point point = Board.GetRandomPoint(Board.MaxX - _size + 1, Board.MaxY - _size + 1);
         (Left, Top) = (point.X, point.Y);
-        //Top = _random.Next(1, Console.WindowHeight - _size);
-        //Left = _random.Next(1, Console.WindowWidth - _size);
-    }
-
-    protected override void SetDimensions()
-    {
-        _size = _random.Next(_minSize, _maxSize + 1);
     }
 
     protected override void SetPoints()
@@ -30,7 +28,7 @@ class Triangle : Shape
 
     public override void Shrink()
     {
-        if (_size > _minSize) _size--;
+        if (_size > MIN_SIZE) _size--;
         SetPoints();
     }
 }

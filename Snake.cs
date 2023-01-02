@@ -1,23 +1,19 @@
 class Snake
 {
-    public static int Score = 0;
-    public Point Head { get { return _headPosition; } }
-    public int Area { get { return _path.Count() + 1; } }
-    private Point _headPosition;
-    private Point _prevHeadPosition;
-    private List<Point> _path = new();
-    private int _MaxX = Console.WindowWidth - 2;
-    private int _MaxY = Console.WindowHeight - 2;
-    private const char _CHAR = '*';
-    private const char _CRASH_CHAR = 'X';
-    private const ConsoleColor _HEAD_COLOR = ConsoleColor.White;
-    private const ConsoleColor _PATH_COLOR = ConsoleColor.Blue;
-
     public Snake(Point start)
     {
         _headPosition = _prevHeadPosition = start;
-        _headPosition.Draw(_CHAR, _HEAD_COLOR);
+        _headPosition.Draw(CHAR, HEAD_COLOR);
     }
+
+    public static int Score = 0;
+    public Point Head { get { return _headPosition; } }
+    private Point _headPosition, _prevHeadPosition;
+    private List<Point> _path = new();
+    private const char CHAR = '*';
+    private const char CRASH_CHAR = 'X';
+    private const ConsoleColor HEAD_COLOR = ConsoleColor.White;
+    private const ConsoleColor PATH_COLOR = ConsoleColor.Blue;
 
     public void Move()
     {
@@ -42,37 +38,37 @@ class Snake
 
     private void MoveUp()
     {
-        if (_headPosition.Y > 1)
+        if (_headPosition.Y > Board.MinY)
             _headPosition.Y--;
     }
 
     private void MoveDown()
     {
-        if (_headPosition.Y < _MaxY)
+        if (_headPosition.Y < Board.MaxY)
             _headPosition.Y++;
     }
 
     private void MoveRight()
     {
-        if (_headPosition.X < _MaxX)
+        if (_headPosition.X < Board.MaxX)
             _headPosition.X++;
     }
 
     private void MoveLeft()
     {
-        if (_headPosition.X > 1)
+        if (_headPosition.X > Board.MinX)
             _headPosition.X--;
     }
 
     private void DrawMove()
     {
-        _prevHeadPosition.Draw(_CHAR, _PATH_COLOR);
-        _headPosition.Draw(_CHAR, _HEAD_COLOR);
+        _prevHeadPosition.Draw(CHAR, PATH_COLOR);
+        _headPosition.Draw(CHAR, HEAD_COLOR);
     }
 
     public bool IsSteppingOnSelf()
     {
-        foreach (Point point in _path)
+        foreach (var point in _path)
             if (_headPosition.Equals(point)) return true;
         return false;
     }
@@ -80,10 +76,10 @@ class Snake
     public void MarkHit()
     {
         foreach (var point in _path)
-            point.Draw('X', ConsoleColor.White);
+            point.Draw(CRASH_CHAR, ConsoleColor.White);
     }
 
-    public void HandleMove()
+    private void HandleMove()
     {
         Score++;
         _path.Add(_prevHeadPosition);
@@ -103,7 +99,7 @@ class Snake
         for (int i = 0; i < 5; i++)
         {
             ConsoleColor color = i % 2 == 0 ? ConsoleColor.Red : ConsoleColor.White;
-            _headPosition.Draw(_CRASH_CHAR, color);
+            _headPosition.Draw(CRASH_CHAR, color);
             Thread.Sleep(200);
         }
     }

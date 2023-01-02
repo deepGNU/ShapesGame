@@ -1,35 +1,33 @@
 class Line : Shape
 {
-    private static int _minLength = 2;
-    private static int _maxLength = 10;
-    private int _length;
-
     public Line(char theChar = '=')
         : base(theChar) { }
+
+    private const int MIN_LENGTH = 2;
+    private const int MAX_LENGTH = 10;
+    private int _length;
+
+    protected override void SetDimensions()
+    {
+        _length = _random.Next(MIN_LENGTH, MAX_LENGTH + 1);
+    }
 
     protected override void SetTopLeft()
     {
         Point point = Board.GetRandomPoint(Board.MaxX - _length + 1);
         (Left, Top) = (point.X, point.Y);
-        //Top = _random.Next(Board.MinY, Console.WindowHeight - 1);
-        //Left = _random.Next(Board.MinX, Console.WindowWidth - _length);
-    }
-
-    protected override void SetDimensions()
-    {
-        _length = _random.Next(_minLength, _maxLength + 1);
     }
 
     protected override void SetPoints()
     {
         Points = new List<Point>();
-        for (int i = 0; i < _length; i++)
-            Points.Add(new Point(Left + i, Top));
+        for (int x = 0; x < _length; x++)
+            Points.Add(new Point(Left + x, Top));
     }
 
     public override void Shrink()
     {
-        if (_length > _minLength) _length--;
+        if (_length > MIN_LENGTH) _length--;
         SetPoints();
     }
 }

@@ -1,39 +1,37 @@
 class Rectangle : Shape
 {
-    static int _minLength = 2;
-    static int _maxLength = 10;
+    public Rectangle(char theChar = 'ם')
+        : base(theChar) { }
+
+    private const int MIN_LENGTH = 2;
+    private const int MAX_LENGTH = 10;
     private int _width;
     private int _height;
 
-    public Rectangle(char theChar = 'ם')
-        : base(theChar) { }
+    protected override void SetDimensions()
+    {
+        _width = _random.Next(MIN_LENGTH, MAX_LENGTH + 1);
+        _height = _random.Next(MIN_LENGTH, MAX_LENGTH + 1);
+    }
 
     protected override void SetTopLeft()
     {
         Point point = Board.GetRandomPoint(Board.MaxX - _width + 1, Board.MaxY - _height + 1);
         (Left, Top) = (point.X, point.Y);
-        //Top = _random.Next(1, Console.WindowHeight - _height);
-        //Left = _random.Next(1, Console.WindowWidth - _width);
-    }
-
-    protected override void SetDimensions()
-    {
-        _width = _random.Next(_minLength, _maxLength + 1);
-        _height = _random.Next(_minLength, _maxLength + 1);
     }
 
     protected override void SetPoints()
     {
         Points = new List<Point>();
-        for (int i = 0; i < _height; i++)
-            for (int j = 0; j < _width; j++)
-                Points.Add(new Point(Left + j, Top + i));
+        for (int y = 0; y < _height; y++)
+            for (int x = 0; x < _width; x++)
+                Points.Add(new Point(Left + x, Top + y));
     }
 
     public override void Shrink()
     {
-        if (_width > _minLength) _width--;
-        if (_height > _minLength) _height--;
+        if (_width > MIN_LENGTH) _width--;
+        if (_height > MIN_LENGTH) _height--;
         SetPoints();
     }
 }

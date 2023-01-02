@@ -1,20 +1,14 @@
 static class RandomColor
 {
-    static Random _rand = new Random();
-    static ConsoleColor[] _colors = {
-        ConsoleColor.DarkBlue,
-        ConsoleColor.DarkGreen,
-        ConsoleColor.DarkCyan,
-        ConsoleColor.DarkRed,
-        ConsoleColor.DarkRed,
-        ConsoleColor.DarkMagenta,
-        ConsoleColor.DarkYellow,
-        ConsoleColor.Green,
-        ConsoleColor.Cyan,
-        ConsoleColor.Red,
-        ConsoleColor.Green,
-        ConsoleColor.Magenta,
-        ConsoleColor.Yellow
-    };
+    private static Random _random = new();
+
+    public static ConsoleColor Get()
+    {
+        Array colors = ((IEnumerable<ConsoleColor>)
+            Enum.GetValues(typeof(ConsoleColor)))
+            .Where(x => x != ConsoleColor.Black).ToArray();
+
+        return (ConsoleColor)colors.GetValue(_random.Next(colors.Length));
+    }
 
 }
