@@ -8,7 +8,7 @@ class Program
     static int consoleHeight = Board.MaxY + 2;
     static int numFails = 0;
     static int numShapes;
-    static Stopwatch stopwatch;
+    static Stopwatch stopwatch = new();
     static RandomShapeList shapes;
     static Point startPoint;
     static Snake snek;
@@ -16,10 +16,8 @@ class Program
     static void Main(string[] args)
     {
         SetConsoleSettings();
-        stopwatch = Stopwatch.StartNew();
         for (numShapes = minShapes; numShapes <= maxShapes; numShapes++)
             PlayRound();
-        stopwatch.Stop();
         DisplayEndingMessage();
     }
 
@@ -39,14 +37,17 @@ class Program
         Board.PrintLTRs(); // Filling board with LTR marks to avoid problems with Hebrew letter 'ם'.
 
         shapes = new(numShapes);
+        // If unable to find start point for snake within max allowed tries, ending round.
         if (!SetStartPointInMaxTries()) return;
         snek = new(startPoint);
 
+        stopwatch.Start();
         while (!shapes.IsHit(snek.Head) && !snek.IsSteppingOnSelf())
         {
             PrintGameState();
             snek.Move();
         }
+        stopwatch.Stop();
 
         HandleCollision();
     }

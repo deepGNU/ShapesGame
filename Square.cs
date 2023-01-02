@@ -17,8 +17,7 @@ class Square : Shape
 
     protected override void SetDimensions()
     {
-        //_size = _random.Next(_minSize, _maxSize + 1);
-        _size = _maxSize;
+        _size = _random.Next(_minSize, _maxSize + 1);
     }
 
     protected override void SetPoints()
