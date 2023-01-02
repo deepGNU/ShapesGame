@@ -10,13 +10,19 @@ class Program
     static int numShapes;
     static Stopwatch stopwatch = new();
     static RandomShapeList shapes;
-    static Point startPoint;
     static Snake snek;
+    static Point startPoint;
+    static bool foundStartPoint = true;
 
     static void Main(string[] args)
     {
         SetConsoleSettings();
-        for (numShapes = minShapes; numShapes <= maxShapes; numShapes++)
+        // Playing rounds until fail while 14 shapes are on screen,
+        // or (extremely unlikely) until failure to place ball within
+        // max allowed tries (30 tries) after at least 1 fail.
+        for (numShapes = minShapes;
+             numShapes <= maxShapes && foundStartPoint;
+             numShapes++)
             PlayRound();
         DisplayEndingMessage();
     }
@@ -37,8 +43,9 @@ class Program
         Board.PrintLTRs(); // Filling board with LTR marks to avoid problems with Hebrew letter 'ם'.
 
         shapes = new(numShapes);
-        // If unable to find start point for snake within max allowed tries, ending round.
-        if (!SetStartPointInMaxTries()) return;
+        SetStartPointInMaxTries();
+        // If start point not found within max allowed tries, ending round.
+        if (!foundStartPoint) return;
         snek = new(startPoint);
 
         stopwatch.Start();
@@ -52,13 +59,16 @@ class Program
         HandleCollision();
     }
 
-    static bool SetStartPointInMaxTries()
+    // Tries to set start point to available point within max tries.
+    static void SetStartPointInMaxTries()
     {
-        int maxStartPointTries = 30;
-        int count = 0;
+        // If there have been no fails (i.e., this is round 1),
+        // then max tries is unlimited; otherwise, max tries is 30;
+        var maxTries = numFails == 0 ? Double.PositiveInfinity : 30;
+        int tries = 0;
         do startPoint = Board.GetRandomPoint();
-        while (shapes.IsHit(startPoint) && ++count <= maxStartPointTries);
-        return count <= maxStartPointTries;
+        while (shapes.IsHit(startPoint) && ++tries <= maxTries);
+        foundStartPoint = tries <= maxTries;
     }
 
     static void PrintGameState()

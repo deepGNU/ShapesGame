@@ -19,15 +19,15 @@ class RandomShapeList
 
     private void AddShape()
     {
-        const int MAX_COUNT = 9;
+        const int MAX_COUNT = 10;
         int count = 0;
         Shape newShape = GetRandomShape();
 
         while (OverlapsOtherShape(newShape))
         {
-            newShape = GetRandomShape();
             if (++count == MAX_COUNT) ShrinkShapes();
             count %= MAX_COUNT;
+            newShape = GetRandomShape();
         }
 
         shapes.Add(newShape);
