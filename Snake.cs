@@ -6,8 +6,8 @@ class Snake
     private Point _headPosition;
     private Point _prevHeadPosition;
     private List<Point> _path = new();
-    private int _maxX = Console.WindowWidth - 2;
-    private int _maxY = Console.WindowHeight - 2;
+    private int _MaxX = Console.WindowWidth - 2;
+    private int _MaxY = Console.WindowHeight - 2;
     private const char _CHAR = '*';
     private const char _CRASH_CHAR = 'X';
     private const ConsoleColor _HEAD_COLOR = ConsoleColor.White;
@@ -21,6 +21,7 @@ class Snake
 
     public void Move()
     {
+        Thread.Sleep(50);
         _prevHeadPosition = _headPosition.Clone();
 
         switch (Console.ReadKey(true).Key)
@@ -47,13 +48,13 @@ class Snake
 
     private void MoveDown()
     {
-        if (_headPosition.Y < _maxY)
+        if (_headPosition.Y < _MaxY)
             _headPosition.Y++;
     }
 
     private void MoveRight()
     {
-        if (_headPosition.X < _maxX)
+        if (_headPosition.X < _MaxX)
             _headPosition.X++;
     }
 
@@ -87,13 +88,11 @@ class Snake
         Score++;
         _path.Add(_prevHeadPosition);
         DrawMove();
-        Thread.Sleep(50);
         FlushKeyboard();
     }
 
-    public void HandleCollision()
+    public void IndicateCollision()
     {
-        Score--;
         Console.Beep();
         FlashCrash();
         FlushKeyboard();

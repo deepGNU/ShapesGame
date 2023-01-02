@@ -26,11 +26,4 @@
         Console.SetCursorPosition(X, Y);
         Console.WriteLine(charToDraw);
     }
-
-    public static Point GetRandom(int maxX, int maxY, int minX = 1, int minY = 1)
-    {
-        int x = _random.Next(minX, maxX);
-        int y = _random.Next(minY, maxY);
-        return new Point(x, y);
-    }
 }

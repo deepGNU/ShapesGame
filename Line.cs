@@ -9,8 +9,10 @@ class Line : Shape
 
     protected override void SetTopLeft()
     {
-        Top = _random.Next(1, Console.WindowHeight - 1);
-        Left = _random.Next(1, Console.WindowWidth - _length);
+        Point point = Board.GetRandomPoint(Board.MaxX - _length + 1);
+        (Left, Top) = (point.X, point.Y);
+        //Top = _random.Next(Board.MinY, Console.WindowHeight - 1);
+        //Left = _random.Next(Board.MinX, Console.WindowWidth - _length);
     }
 
     protected override void SetDimensions()

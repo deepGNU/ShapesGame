@@ -43,13 +43,6 @@ abstract class Shape
         return false;
     }
 
-    //public void Relocate()
-    //{
-    //    SetTopLeft();
-    //    Points = new List<Point>();
-    //    SetPoints();
-    //}
-
     static ConsoleColor GetRandomColor()
     {
         Array colors = ((IEnumerable<ConsoleColor>)

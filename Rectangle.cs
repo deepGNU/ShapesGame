@@ -10,8 +10,10 @@ class Rectangle : Shape
 
     protected override void SetTopLeft()
     {
-        Top = _random.Next(1, Console.WindowHeight - _height);
-        Left = _random.Next(1, Console.WindowWidth - _width);
+        Point point = Board.GetRandomPoint(Board.MaxX - _width + 1, Board.MaxY - _height + 1);
+        (Left, Top) = (point.X, point.Y);
+        //Top = _random.Next(1, Console.WindowHeight - _height);
+        //Left = _random.Next(1, Console.WindowWidth - _width);
     }
 
     protected override void SetDimensions()

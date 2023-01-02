@@ -9,8 +9,10 @@ class Square : Shape
 
     protected override void SetTopLeft()
     {
-        Top = _random.Next(1, Console.WindowHeight - _size);
-        Left = _random.Next(1, Console.WindowWidth - _size);
+        Point point = Board.GetRandomPoint(Board.MaxX - _size + 1, Board.MaxY - _size + 1);
+        (Left, Top) = (point.X, point.Y);
+        //Top = _random.Next(1, Console.WindowHeight - _size);
+        //Left = _random.Next(1, Console.WindowWidth - _size);
     }
 
     protected override void SetDimensions()
